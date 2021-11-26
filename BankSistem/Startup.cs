@@ -26,6 +26,7 @@ namespace BankSistem
             services.ConfigureCors(); // For Support CORS
             services.ConfigureIISIntegration(); // For Integration IIS
             services.ConfigureLoggerService();  // For Logging Messages
+            services.ConfigureSqlContext(Configuration); //For SQL
 
             services.AddControllers();
         }

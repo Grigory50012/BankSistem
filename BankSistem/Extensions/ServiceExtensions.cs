@@ -1,6 +1,9 @@
 ﻿using Contracts;
+using Entities;
 using LoggeService;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BankSistem.Extensions
@@ -28,5 +31,12 @@ namespace BankSistem.Extensions
         public static void ConfigureLoggerService(this IServiceCollection service)
             => service.AddScoped<ILoggerManager, LoggerManager>();
 
+        // For Connection SQLServer
+        public static void ConfigureSqlContext(this IServiceCollection service, IConfiguration configuration)
+            => service.AddDbContext<RepositoryContext>(options =>
+            {
+                options.UseSqlServer(configuration.GetConnectionString("sqlConnection"), b =>
+                    b.MigrationsAssembly("BankSistem"));
+            });
     }
 }
