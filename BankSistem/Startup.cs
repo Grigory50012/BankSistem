@@ -1,5 +1,7 @@
+using BankSistem.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -26,6 +28,7 @@ namespace BankSistem
         public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureCors(); // For Support CORS
+            services.ConfigureIISIntegration(); // For Integration IIS
 
             services.AddControllers();
         }
@@ -37,13 +40,27 @@ namespace BankSistem
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHsts();
+            }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles(); // Useng Static Files
 
-            app.UseRouting();
+            app.UseCors("CorsPolicy"); // Configure CORS
 
-            app.UseAuthorization();
+            // Will Forward Proxy Headers To The Current Request
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.All
+            });
 
+            app.UseRouting(); // Routing Function
+
+            app.UseAuthorization(); // Authorization Function
+
+            // Add Endpoint For Controller Action
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

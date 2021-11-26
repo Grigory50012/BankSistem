@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,5 +19,11 @@ namespace BankSistem.Extensions
                     .AllowAnyHeader());     //WithHeaders("accept", "content-type")
             });
 
+        // For Deployent IIS
+        public static void ConfigureIISIntegration(this IServiceCollection service)
+            => service.Configure<IISOptions>(options =>
+            {
+
+            });
     }
 }
