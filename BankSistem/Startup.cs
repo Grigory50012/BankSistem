@@ -2,16 +2,11 @@ using BankSistem.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using NLog;
+using System.IO;
 
 namespace BankSistem
 {
@@ -19,6 +14,7 @@ namespace BankSistem
     {
         public Startup(IConfiguration configuration)
         {
+            LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config.txt"));
             Configuration = configuration;
         }
 
@@ -29,6 +25,7 @@ namespace BankSistem
         {
             services.ConfigureCors(); // For Support CORS
             services.ConfigureIISIntegration(); // For Integration IIS
+            services.ConfigureLoggerService();  // For Logging Messages
 
             services.AddControllers();
         }

@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Contracts;
+using LoggeService;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BankSistem.Extensions
 {
@@ -25,5 +23,10 @@ namespace BankSistem.Extensions
             {
 
             });
+
+        // For Configure Logger Service
+        public static void ConfigureLoggerService(this IServiceCollection service)
+            => service.AddScoped<ILoggerManager, LoggerManager>();
+
     }
 }
