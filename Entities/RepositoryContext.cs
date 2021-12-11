@@ -11,6 +11,11 @@ namespace Entities
 
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+
+        }
+
         public DbSet<Town> Towns { get; set; }
         public DbSet<Bank> Banks { get; set; }
         public DbSet<SocialStatus> SocialStatuses { get; set; }

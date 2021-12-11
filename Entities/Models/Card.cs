@@ -15,10 +15,10 @@ namespace Entities.Models
 
         [ForeignKey(nameof(Account))]
         public Guid AccountId { get; set; }
-        public SocialStatus Account { get; set; }
+        public Account Account { get; set; }
 
         [ForeignKey(nameof(Bank))]
         public Guid BankId { get; set; }
-        public SocialStatus Bank { get; set; }
+        public Bank Bank { get; set; }
     }
 }
