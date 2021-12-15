@@ -7,20 +7,20 @@ namespace Entities.Models
 {
     public class Account
     {
-        [Column("AccountId")]
+        [Column("IdAccount")]
         public Guid Id { get; set; }
 
-        [Required(ErrorMessage = "Account name is required field.")]
-        [MaxLength(40, ErrorMessage = "Maximum length for the Name is 40 characters.")]
-        public string Name { get; set; }
-
         [Required(ErrorMessage = "Account balance is required field.")]
-        [Column(TypeName ="Money")]
+        [Column(TypeName = "Money")]
         public decimal Balance { get; set; }
 
-        [ForeignKey(nameof(SocialStatus))]
-        public Guid SocialStatusId { get; set; }
-        public SocialStatus SocialStatus { get; set; }
+        [ForeignKey(nameof(Bank))]
+        public Guid IdBank { get; set; }
+        public Bank Bank { get; set; }
+
+        [ForeignKey(nameof(CardOwner))]
+        public Guid IdCardOwner { get; set; }
+        public CardOwner CardOwner { get; set; }
 
         public ICollection<Card> Cards { get; set; }
     }

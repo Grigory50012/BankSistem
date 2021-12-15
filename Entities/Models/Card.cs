@@ -6,7 +6,7 @@ namespace Entities.Models
 {
     public class Card
     {
-        [Column("CardId")]
+        [Column("IdCard")]
         public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Card balance is required field.")]
@@ -14,11 +14,7 @@ namespace Entities.Models
         public decimal Balance { get; set; }
 
         [ForeignKey(nameof(Account))]
-        public Guid AccountId { get; set; }
+        public Guid IdAccount { get; set; }
         public Account Account { get; set; }
-
-        [ForeignKey(nameof(Bank))]
-        public Guid BankId { get; set; }
-        public Bank Bank { get; set; }
     }
 }

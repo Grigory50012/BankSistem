@@ -7,13 +7,13 @@ namespace Entities.Models
 {
     public class Town
     {
-        [Column("TownId")]
+        [Column("IdTown")]
         public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Town name is required field.")]
         [MaxLength(40, ErrorMessage = "Maximum length for the Name is 40 characters.")]
         public string Name { get; set; }
 
-        public ICollection<Bank> Banks { get; set; }
+        public ICollection<BankBranch> BankBranches { get; set; }
     }
 }
