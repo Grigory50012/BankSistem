@@ -27,6 +27,7 @@ namespace BankSistem
             services.ConfigureIISIntegration(); // For Integration IIS
             services.ConfigureLoggerService();  // For Logging Messages
             services.ConfigureSqlContext(Configuration); //For SQL
+            services.ConfigureRepositoryManager();
 
             services.AddControllers();
         }

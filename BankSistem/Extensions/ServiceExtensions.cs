@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Repository;
 
 namespace BankSistem.Extensions
 {
@@ -38,5 +39,8 @@ namespace BankSistem.Extensions
                 options.UseSqlServer(configuration.GetConnectionString("sqlConnection"), b =>
                     b.MigrationsAssembly("BankSistem"));
             });
+
+        public static void ConfigureRepositoryManager(this IServiceCollection services)
+            => services.AddScoped<IRepositoryManager, RepositoryManager>();
     }
 }
