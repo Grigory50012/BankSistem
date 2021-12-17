@@ -1,6 +1,8 @@
 ﻿using Contracts;
 using Entities;
 using Entities.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Repository
 {
@@ -8,7 +10,9 @@ namespace Repository
     {
         public AccountRepository(RepositoryContext repositoryContext) : base(repositoryContext)
         {
-
         }
+
+        public IEnumerable<Account> GetAllAccounts(bool trackChenges)
+            => FindAll(trackChenges).ToList();
     }
 }
