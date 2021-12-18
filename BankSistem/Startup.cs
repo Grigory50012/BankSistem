@@ -28,6 +28,7 @@ namespace BankSistem
             services.ConfigureLoggerService();  // For Logging Messages
             services.ConfigureSqlContext(Configuration); //For SQL
             services.ConfigureRepositoryManager();
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddControllers();
         }

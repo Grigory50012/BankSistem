@@ -14,14 +14,14 @@ namespace Entities
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new AccountConfiguration());
-            modelBuilder.ApplyConfiguration(new BankBranchConfiguration());
-            modelBuilder.ApplyConfiguration(new BankConfiguration());
-            modelBuilder.ApplyConfiguration(new CardConfiguration());
-            modelBuilder.ApplyConfiguration(new CardOwnerConfiguration());
-            modelBuilder.ApplyConfiguration(new OwnerStatusConfiguration());
-            modelBuilder.ApplyConfiguration(new SocialStatusConfiguration());
-            modelBuilder.ApplyConfiguration(new TownConfiguration());
+            //modelBuilder.ApplyConfiguration(new AccountConfiguration());
+            //modelBuilder.ApplyConfiguration(new BankBranchConfiguration());
+            //modelBuilder.ApplyConfiguration(new BankConfiguration());
+            //modelBuilder.ApplyConfiguration(new CardConfiguration());
+            //modelBuilder.ApplyConfiguration(new CardOwnerConfiguration());
+            //modelBuilder.ApplyConfiguration(new OwnerStatusConfiguration());
+            //modelBuilder.ApplyConfiguration(new SocialStatusConfiguration());
+            //modelBuilder.ApplyConfiguration(new TownConfiguration());
         }
 
         public DbSet<Town> Towns { get; set; }

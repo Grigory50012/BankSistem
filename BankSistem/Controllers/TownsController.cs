@@ -7,15 +7,15 @@ using System.Collections.Generic;
 
 namespace BankSistem.Controllers
 {
-    [Route("api/accounts")]
+    [Route("api/towns")]
     [ApiController]
-    public class AccountsController : ControllerBase
+    public class TownsController : ControllerBase
     {
         private readonly IRepositoryManager _repository;
         private readonly ILoggerManager _logger;
         private readonly IMapper _mapper;
 
-        public AccountsController(IRepositoryManager repository, ILoggerManager logger, IMapper mapper)
+        public TownsController(IRepositoryManager repository, ILoggerManager logger, IMapper mapper)
         {
             _repository = repository;
             _logger = logger;
@@ -23,17 +23,17 @@ namespace BankSistem.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAccounts()
+        public IActionResult GetTowns()
         {
             try
             {
-                var accounts = _repository.Account.GetAllAccounts(trackChenges: false);
-                var accountsDto = _mapper.Map<IEnumerable<AccountDto>>(accounts);
-                return Ok(accountsDto);
+                var towns = _repository.Town.GetAllTowns(trackChenges: false);
+                var townsDto = _mapper.Map<IEnumerable<TownDto>>(towns);
+                return Ok(townsDto);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                _logger.LogError($"Something went wrong in the {nameof(GetAccounts)} action {ex}");
+                _logger.LogError($"Something went wrong in the {nameof(GetTowns)} action {ex}");
                 return StatusCode(500, "Internal server error");
             }
         }
