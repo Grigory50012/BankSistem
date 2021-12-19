@@ -25,17 +25,9 @@ namespace BankSistem.Controllers
         [HttpGet]
         public IActionResult GetAccounts()
         {
-            try
-            {
-                var accounts = _repository.Account.GetAllAccounts(trackChenges: false);
-                var accountsDto = _mapper.Map<IEnumerable<AccountDto>>(accounts);
-                return Ok(accountsDto);
-            }
-            catch(Exception ex)
-            {
-                _logger.LogError($"Something went wrong in the {nameof(GetAccounts)} action {ex}");
-                return StatusCode(500, "Internal server error");
-            }
+            var accounts = _repository.Account.GetAllAccounts(trackChenges: false);
+            var accountsDto = _mapper.Map<IEnumerable<AccountDto>>(accounts);
+            return Ok(accountsDto);
         }
     }
 }

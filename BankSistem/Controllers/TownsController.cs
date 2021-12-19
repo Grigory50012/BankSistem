@@ -25,17 +25,9 @@ namespace BankSistem.Controllers
         [HttpGet]
         public IActionResult GetTowns()
         {
-            try
-            {
-                var towns = _repository.Town.GetAllTowns(trackChenges: false);
-                var townsDto = _mapper.Map<IEnumerable<TownDto>>(towns);
-                return Ok(townsDto);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong in the {nameof(GetTowns)} action {ex}");
-                return StatusCode(500, "Internal server error");
-            }
+            var towns = _repository.Town.GetAllTowns(trackChenges: false);
+            var townsDto = _mapper.Map<IEnumerable<TownDto>>(towns);
+            return Ok(townsDto);
         }
     }
 }
