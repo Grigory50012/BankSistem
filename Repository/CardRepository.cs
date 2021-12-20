@@ -1,6 +1,9 @@
 ﻿using Contracts;
 using Entities;
 using Entities.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Repository
 {
@@ -8,7 +11,9 @@ namespace Repository
     {
         public CardRepository(RepositoryContext repositoryContext) : base(repositoryContext)
         {
-
         }
+
+        public IEnumerable<Card> GetCards(Guid idAccount, bool trackChenges)
+            => FindByCondition(card => card.IdAccount.Equals(idAccount), trackChenges).ToList();
     }
 }

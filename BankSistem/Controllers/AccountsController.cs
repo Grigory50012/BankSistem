@@ -29,5 +29,21 @@ namespace BankSistem.Controllers
             var accountsDto = _mapper.Map<IEnumerable<AccountDto>>(accounts);
             return Ok(accountsDto);
         }
+
+        [HttpGet("{id}")]
+        public IActionResult GetAccount(Guid id)
+        {
+            var account = _repository.Account.GetAccount(id, trackChenges: false);
+            if(account == null)
+            {
+                _logger.LogInfo("Account with id does't exist in the database.");
+                return NotFound();
+            }
+            else
+            {
+                var accontDto = _mapper.Map<AccountDto>(account);
+                return Ok(accontDto);
+            }
+        }
     }
 }

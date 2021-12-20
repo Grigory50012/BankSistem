@@ -10,6 +10,7 @@ namespace BankSistem
         {
             CreateMap<Account, AccountDto>();
             CreateMap<Town, TownDto>();
+            CreateMap<Card, CardDto>();
         }
     }
 }

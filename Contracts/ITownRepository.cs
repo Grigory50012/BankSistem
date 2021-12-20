@@ -5,6 +5,6 @@ namespace Contracts
 {
     public interface ITownRepository
     {
-        IEnumerable<Town> GetAllTowns(bool trackChenges);
+        IEnumerable<Town> GetTowns(bool trackChenges);
     }
 }

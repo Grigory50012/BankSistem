@@ -12,7 +12,7 @@ namespace Repository
         {
         }
 
-        public IEnumerable<Town> GetAllTowns(bool trackChenges)
-            => FindAll(trackChenges).OrderBy(town => town.Name).ToList();
+        public IEnumerable<Town> GetTowns(bool trackChenges)
+            => FindAll(trackChenges).OrderBy(town => town.Name);
     }
 }
