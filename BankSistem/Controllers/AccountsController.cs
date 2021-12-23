@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Contracts;
 using Entities.DataTransferObjects;
+using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -25,15 +26,15 @@ namespace BankSistem.Controllers
         [HttpGet]
         public IActionResult GetAccounts()
         {
-            var accounts = _repository.Account.GetAllAccounts(trackChenges: false);
-            var accountsDto = _mapper.Map<IEnumerable<AccountDto>>(accounts);
+            IEnumerable<Account> accounts = _repository.Account.GetAllAccounts(trackChenges: false);
+            IEnumerable<AccountDto> accountsDto = _mapper.Map<IEnumerable<AccountDto>>(accounts);
             return Ok(accountsDto);
         }
 
         [HttpGet("{id}")]
         public IActionResult GetAccount(Guid id)
         {
-            var account = _repository.Account.GetAccount(id, trackChenges: false);
+            Account account = _repository.Account.GetAccount(id, trackChenges: false);
             if(account == null)
             {
                 _logger.LogInfo("Account with id does't exist in the database.");
@@ -41,7 +42,7 @@ namespace BankSistem.Controllers
             }
             else
             {
-                var accontDto = _mapper.Map<AccountDto>(account);
+                AccountDto accontDto = _mapper.Map<AccountDto>(account);
                 return Ok(accontDto);
             }
         }

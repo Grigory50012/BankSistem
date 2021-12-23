@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Contracts;
 using Entities.DataTransferObjects;
+using Entities.DataTransferObjects.ForCreationDto;
+using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -22,19 +24,78 @@ namespace BankSistem.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet(Name = "CardsByAccountId")]
         public IActionResult GetCards(Guid idAccount)
         {
-            var account = _repository.Account.GetAccount(idAccount, trackChenges: false);
+            Account account = GetAccountById(idAccount);
             if (account == null)
             {
-                _logger.LogInfo("Account with id does't exist in the database.");
+                _logger.LogInfo($"Account with id: {idAccount} does't exist in the database.");
                 return NotFound();
             }
 
-            var cards = _repository.Card.GetCards(idAccount, trackChenges: false);
-            var cardsDto = _mapper.Map<IEnumerable<CardDto>>(cards);
+            IEnumerable<Card> cards = _repository.Card.GetCards(idAccount, trackChenges: false);
+            IEnumerable<CardDto> cardsDto = _mapper.Map<IEnumerable<CardDto>>(cards);
             return Ok(cardsDto);
+        }
+
+        [HttpPost]
+        public IActionResult CreateCard(Guid idAccount, [FromBody] CardForCreationDto card)
+        {
+            if (card == null)
+            {
+                _logger.LogError("CardForCreationDto object sent from client is null.");
+                return BadRequest("CardForCreationDto object is null.");
+            }
+
+            Account account = GetAccountById(idAccount);
+            if (account == null)
+            {
+                _logger.LogInfo($"Account with id: {idAccount} does't exist in the database.");
+                return NotFound();
+            }
+
+            Card cardEntity = _mapper.Map<Card>(card);
+
+            _repository.Card.CreateCard(idAccount, cardEntity);
+            _repository.Save();
+
+            CardDto cardToReturn = _mapper.Map<CardDto>(cardEntity);
+
+            return CreatedAtRoute("CardsByAccountId", new { idAccount }, cardToReturn);
+        }
+
+        [HttpPost("collection")]
+        public IActionResult CreateCardCollection(Guid idAccount, IEnumerable<CardForCreationDto> cardCollection)
+        {
+            if(cardCollection == null)
+            {
+                _logger.LogError("Card collection sent from client is null.");
+                return BadRequest("Card collection is null");
+            }
+
+            Account account = GetAccountById(idAccount);
+            if (account == null)
+            {
+                _logger.LogInfo($"Account with id: {idAccount} does't exist in the database.");
+                return NotFound();
+            }
+
+            IEnumerable<Card> cardEntities = _mapper.Map<IEnumerable<Card>>(cardCollection);
+            foreach (Card card in cardEntities)
+            {
+                _repository.Card.CreateCard(idAccount, card);
+            }
+            _repository.Save();
+
+            IEnumerable<CardDto> cardCollectionsToReturn = _mapper.Map<IEnumerable<CardDto>>(cardEntities);
+
+            return CreatedAtRoute("CardsByAccountId", new { idAccount }, cardCollectionsToReturn);
+        }
+
+        private Account GetAccountById(Guid idAccount)
+        {
+            return _repository.Account.GetAccount(idAccount, trackChenges: false);
         }
     }
 }

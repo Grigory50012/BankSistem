@@ -15,5 +15,14 @@ namespace Repository
 
         public IEnumerable<Card> GetCards(Guid idAccount, bool trackChenges)
             => FindByCondition(card => card.IdAccount.Equals(idAccount), trackChenges).ToList();
+
+        public void CreateCard(Guid idAccount, Card card)
+        {
+            card.IdAccount = idAccount;
+            Create(card);
+        }
+
+        public IEnumerable<Card> GetCardsByIds(IEnumerable<Guid> ids, bool trackChenges)
+            => FindByCondition(card => ids.Contains(card.Id), trackChenges).ToList();
     }
 }
