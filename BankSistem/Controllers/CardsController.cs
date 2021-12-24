@@ -24,6 +24,27 @@ namespace BankSistem.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet("{idCard}")]
+        public IActionResult GetCard(Guid idAccount, Guid idCard)
+        {
+            Account account = GetAccountById(idAccount);
+            if (account == null)
+            {
+                _logger.LogInfo($"Account with id: {idAccount} does't exist in the database.");
+                return NotFound();
+            }
+
+            Card card = _repository.Card.GetCard(idAccount, idCard, trackChenges: false);
+            if(card == null)
+            {
+                _logger.LogError($"Card with id: {idCard} doesn't exist in the database.");
+                return NotFound();
+            }
+
+            CardDto cardToReturn = _mapper.Map<CardDto>(card);
+            return Ok(cardToReturn);
+        }
+
         [HttpGet(Name = "CardsByAccountId")]
         public IActionResult GetCards(Guid idAccount)
         {
@@ -93,9 +114,29 @@ namespace BankSistem.Controllers
             return CreatedAtRoute("CardsByAccountId", new { idAccount }, cardCollectionsToReturn);
         }
 
-        private Account GetAccountById(Guid idAccount)
+        [HttpDelete("{idCard}")]
+        public IActionResult DeleteCard(Guid idAccount, Guid idCard)
         {
-            return _repository.Account.GetAccount(idAccount, trackChenges: false);
+            Account account = GetAccountById(idAccount);
+            if (account == null)
+            {
+                _logger.LogInfo($"Account with id: {idAccount} does't exist in the database.");
+                return NotFound();
+            }
+
+            Card card = _repository.Card.GetCard(idAccount, idCard, trackChenges: false);
+            if (card == null)
+            {
+                _logger.LogError($"Card with id: {idCard} doesn't exist in the database.");
+                return NotFound();
+            }
+
+            _repository.Card.DeleteCard(card);
+            _repository.Save();
+
+            return NoContent();
         }
+
+        private Account GetAccountById(Guid idAccount) => _repository.Account.GetAccount(idAccount, trackChenges: false);
     }
 }

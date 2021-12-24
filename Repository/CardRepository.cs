@@ -9,9 +9,10 @@ namespace Repository
 {
     class CardRepository : RepositoryBase<Card>, ICardRepository
     {
-        public CardRepository(RepositoryContext repositoryContext) : base(repositoryContext)
-        {
-        }
+        public CardRepository(RepositoryContext repositoryContext) : base(repositoryContext) { }
+
+        public Card GetCard(Guid idAccount, Guid idCard, bool trackChenges)
+            => FindByCondition(card => card.IdAccount.Equals(idAccount) && card.Id.Equals(idCard), trackChenges).SingleOrDefault();
 
         public IEnumerable<Card> GetCards(Guid idAccount, bool trackChenges)
             => FindByCondition(card => card.IdAccount.Equals(idAccount), trackChenges).ToList();
@@ -22,7 +23,6 @@ namespace Repository
             Create(card);
         }
 
-        public IEnumerable<Card> GetCardsByIds(IEnumerable<Guid> ids, bool trackChenges)
-            => FindByCondition(card => ids.Contains(card.Id), trackChenges).ToList();
+        public void DeleteCard(Card card) => Delete(card);
     }
 }

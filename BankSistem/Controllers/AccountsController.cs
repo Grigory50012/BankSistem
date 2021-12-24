@@ -32,12 +32,12 @@ namespace BankSistem.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetAccount(Guid id)
+        public IActionResult GetAccount(Guid idAccount)
         {
-            Account account = _repository.Account.GetAccount(id, trackChenges: false);
+            Account account = _repository.Account.GetAccount(idAccount, trackChenges: false);
             if(account == null)
             {
-                _logger.LogInfo("Account with id does't exist in the database.");
+                _logger.LogInfo($"Account with id: {idAccount} does't exist in the database.");
                 return NotFound();
             }
             else

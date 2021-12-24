@@ -6,8 +6,9 @@ namespace Contracts
 {
     public interface ICardRepository
     {
+        Card GetCard(Guid idAccount, Guid idCard, bool trackChenges);
         IEnumerable<Card> GetCards(Guid idAccount, bool trackChenges);
         void CreateCard(Guid idAccount, Card card);
-        IEnumerable<Card> GetCardsByIds(IEnumerable<Guid> ids, bool trackChenges);
+        void DeleteCard(Card card);
     }
 }
