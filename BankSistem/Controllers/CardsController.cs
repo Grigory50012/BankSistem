@@ -71,6 +71,12 @@ namespace BankSistem.Controllers
                 return BadRequest("CardForCreationDto object is null.");
             }
 
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError("Invalid model state for the EmployeeForCreationDto object");
+                return UnprocessableEntity(ModelState);
+            }
+
             Account account = GetAccountById(idAccount);
             if (account == null)
             {
@@ -164,7 +170,13 @@ namespace BankSistem.Controllers
 
             CardForUpdateDto cardToPatch = _mapper.Map<CardForUpdateDto>(cardEntity);
 
-            patchDocument.ApplyTo(cardToPatch);
+            patchDocument.ApplyTo(cardToPatch, ModelState);
+
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError("Invalid model state for the EmployeeForCreationDto object");
+                return UnprocessableEntity(ModelState);
+            }
 
             _mapper.Map(cardToPatch, cardEntity);
 
