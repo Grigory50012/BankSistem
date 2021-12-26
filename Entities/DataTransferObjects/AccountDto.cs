@@ -1,5 +1,4 @@
-﻿using Entities.Models;
-using System;
+﻿using System;
 
 namespace Entities.DataTransferObjects
 {

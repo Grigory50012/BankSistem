@@ -31,7 +31,7 @@ namespace BankSistem.Controllers
             return Ok(accountsDto);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{idAccount}")]
         public IActionResult GetAccount(Guid idAccount)
         {
             Account account = _repository.Account.GetAccount(idAccount, trackChenges: false);
@@ -40,11 +40,8 @@ namespace BankSistem.Controllers
                 _logger.LogInfo($"Account with id: {idAccount} does't exist in the database.");
                 return NotFound();
             }
-            else
-            {
-                AccountDto accontDto = _mapper.Map<AccountDto>(account);
-                return Ok(accontDto);
-            }
+            AccountDto accontDto = _mapper.Map<AccountDto>(account);
+            return Ok(accontDto);
         }
     }
 }

@@ -2,7 +2,9 @@
 using Contracts;
 using Entities.DataTransferObjects;
 using Entities.DataTransferObjects.ForCreationDto;
+using Entities.DataTransferObjects.ForUpdateDto;
 using Entities.Models;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -35,7 +37,7 @@ namespace BankSistem.Controllers
             }
 
             Card card = _repository.Card.GetCard(idAccount, idCard, trackChenges: false);
-            if(card == null)
+            if (card == null)
             {
                 _logger.LogError($"Card with id: {idCard} doesn't exist in the database.");
                 return NotFound();
@@ -89,7 +91,7 @@ namespace BankSistem.Controllers
         [HttpPost("collection")]
         public IActionResult CreateCardCollection(Guid idAccount, IEnumerable<CardForCreationDto> cardCollection)
         {
-            if(cardCollection == null)
+            if (cardCollection == null)
             {
                 _logger.LogError("Card collection sent from client is null.");
                 return BadRequest("Card collection is null");
@@ -132,6 +134,40 @@ namespace BankSistem.Controllers
             }
 
             _repository.Card.DeleteCard(card);
+            _repository.Save();
+
+            return NoContent();
+        }
+
+        [HttpPatch("{idCard}")]
+        public IActionResult PartiallyUpdateCardForAccount(Guid idAccount, Guid idCard, [FromBody] JsonPatchDocument<CardForUpdateDto> patchDocument)
+        {
+            if (patchDocument == null)
+            {
+                _logger.LogError("patchDoc object sent from client is null.");
+                return BadRequest("patchDoc object is null");
+            }
+
+            Account account = GetAccountById(idAccount);
+            if (account == null)
+            {
+                _logger.LogInfo($"Account with id: {idAccount} does't exist in the database.");
+                return NotFound();
+            }
+
+            Card cardEntity = _repository.Card.GetCard(idAccount, idCard, trackChenges: true);
+            if (cardEntity == null)
+            {
+                _logger.LogError($"Card with id: {idCard} doesn't exist in the database.");
+                return NotFound();
+            }
+
+            CardForUpdateDto cardToPatch = _mapper.Map<CardForUpdateDto>(cardEntity);
+
+            patchDocument.ApplyTo(cardToPatch);
+
+            _mapper.Map(cardToPatch, cardEntity);
+
             _repository.Save();
 
             return NoContent();
