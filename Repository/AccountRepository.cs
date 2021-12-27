@@ -1,9 +1,10 @@
 ﻿using Contracts;
 using Entities;
 using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace Repository
 {
@@ -13,10 +14,10 @@ namespace Repository
         {
         }
 
-        public IEnumerable<Account> GetAllAccounts(bool trackChenges)
-            => FindAll(trackChenges).ToList();
+        public async Task<IEnumerable<Account>> GetAllAccountsAsync(bool trackChenges)
+            => await FindAll(trackChenges).ToListAsync();
 
-        public Account GetAccount(Guid idAccount, bool trackChenges)
-            => FindByCondition(account => account.Id.Equals(idAccount), trackChenges).SingleOrDefault();
+        public async Task<Account> GetAccountAsync(Guid idAccount, bool trackChenges)
+            => await FindByCondition(account => account.Id.Equals(idAccount), trackChenges).SingleOrDefaultAsync();
     }
 }

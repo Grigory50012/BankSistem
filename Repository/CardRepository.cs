@@ -1,9 +1,10 @@
 ﻿using Contracts;
 using Entities;
 using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace Repository
 {
@@ -11,11 +12,11 @@ namespace Repository
     {
         public CardRepository(RepositoryContext repositoryContext) : base(repositoryContext) { }
 
-        public Card GetCard(Guid idAccount, Guid idCard, bool trackChenges)
-            => FindByCondition(card => card.IdAccount.Equals(idAccount) && card.Id.Equals(idCard), trackChenges).SingleOrDefault();
+        public async Task<Card> GetCardAsync(Guid idAccount, Guid idCard, bool trackChenges)
+            => await FindByCondition(card => card.IdAccount.Equals(idAccount) && card.Id.Equals(idCard), trackChenges).SingleOrDefaultAsync();
 
-        public IEnumerable<Card> GetCards(Guid idAccount, bool trackChenges)
-            => FindByCondition(card => card.IdAccount.Equals(idAccount), trackChenges).ToList();
+        public async Task<IEnumerable<Card>> GetCardsAsync(Guid idAccount, bool trackChenges)
+            => await FindByCondition(card => card.IdAccount.Equals(idAccount), trackChenges).ToListAsync();
 
         public void CreateCard(Guid idAccount, Card card)
         {

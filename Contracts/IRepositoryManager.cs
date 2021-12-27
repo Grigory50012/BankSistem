@@ -10,6 +10,6 @@
         IOwnerStatusRepository OwnerStatus { get; }
         ISocialStatusRepository SocialStatus { get; }
         ITownRepository Town { get; }
-        void Save();
+        void SaveAsync();
     }
 }

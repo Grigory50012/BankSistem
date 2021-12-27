@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BankSistem.Controllers
 {
@@ -27,16 +28,16 @@ namespace BankSistem.Controllers
         }
 
         [HttpGet("{idCard}")]
-        public IActionResult GetCard(Guid idAccount, Guid idCard)
+        public async Task<IActionResult> GetCard(Guid idAccount, Guid idCard)
         {
-            Account account = GetAccountById(idAccount);
+            Account account = await GetAccountById(idAccount);
             if (account == null)
             {
                 _logger.LogInfo($"Account with id: {idAccount} does't exist in the database.");
                 return NotFound();
             }
 
-            Card card = _repository.Card.GetCard(idAccount, idCard, trackChenges: false);
+            Card card = await _repository.Card.GetCardAsync(idAccount, idCard, trackChenges: false);
             if (card == null)
             {
                 _logger.LogError($"Card with id: {idCard} doesn't exist in the database.");
@@ -48,22 +49,22 @@ namespace BankSistem.Controllers
         }
 
         [HttpGet(Name = "CardsByAccountId")]
-        public IActionResult GetCards(Guid idAccount)
+        public async Task<IActionResult> GetCards(Guid idAccount)
         {
-            Account account = GetAccountById(idAccount);
+            Account account = await GetAccountById(idAccount);
             if (account == null)
             {
                 _logger.LogInfo($"Account with id: {idAccount} does't exist in the database.");
                 return NotFound();
             }
 
-            IEnumerable<Card> cards = _repository.Card.GetCards(idAccount, trackChenges: false);
+            IEnumerable<Card> cards = await _repository.Card.GetCardsAsync(idAccount, trackChenges: false);
             IEnumerable<CardDto> cardsDto = _mapper.Map<IEnumerable<CardDto>>(cards);
             return Ok(cardsDto);
         }
 
         [HttpPost]
-        public IActionResult CreateCard(Guid idAccount, [FromBody] CardForCreationDto card)
+        public async Task<IActionResult> CreateCard(Guid idAccount, [FromBody] CardForCreationDto card)
         {
             if (card == null)
             {
@@ -77,7 +78,7 @@ namespace BankSistem.Controllers
                 return UnprocessableEntity(ModelState);
             }
 
-            Account account = GetAccountById(idAccount);
+            Account account = await GetAccountById(idAccount);
             if (account == null)
             {
                 _logger.LogInfo($"Account with id: {idAccount} does't exist in the database.");
@@ -87,7 +88,7 @@ namespace BankSistem.Controllers
             Card cardEntity = _mapper.Map<Card>(card);
 
             _repository.Card.CreateCard(idAccount, cardEntity);
-            _repository.Save();
+            _repository.SaveAsync();
 
             CardDto cardToReturn = _mapper.Map<CardDto>(cardEntity);
 
@@ -95,7 +96,7 @@ namespace BankSistem.Controllers
         }
 
         [HttpPost("collection")]
-        public IActionResult CreateCardCollection(Guid idAccount, IEnumerable<CardForCreationDto> cardCollection)
+        public async Task<IActionResult> CreateCardCollection(Guid idAccount, IEnumerable<CardForCreationDto> cardCollection)
         {
             if (cardCollection == null)
             {
@@ -103,7 +104,7 @@ namespace BankSistem.Controllers
                 return BadRequest("Card collection is null");
             }
 
-            Account account = GetAccountById(idAccount);
+            Account account = await GetAccountById(idAccount);
             if (account == null)
             {
                 _logger.LogInfo($"Account with id: {idAccount} does't exist in the database.");
@@ -115,7 +116,7 @@ namespace BankSistem.Controllers
             {
                 _repository.Card.CreateCard(idAccount, card);
             }
-            _repository.Save();
+            _repository.SaveAsync();
 
             IEnumerable<CardDto> cardCollectionsToReturn = _mapper.Map<IEnumerable<CardDto>>(cardEntities);
 
@@ -123,16 +124,16 @@ namespace BankSistem.Controllers
         }
 
         [HttpDelete("{idCard}")]
-        public IActionResult DeleteCard(Guid idAccount, Guid idCard)
+        public async Task<IActionResult> DeleteCard(Guid idAccount, Guid idCard)
         {
-            Account account = GetAccountById(idAccount);
+            Account account = await GetAccountById(idAccount);
             if (account == null)
             {
                 _logger.LogInfo($"Account with id: {idAccount} does't exist in the database.");
                 return NotFound();
             }
 
-            Card card = _repository.Card.GetCard(idAccount, idCard, trackChenges: false);
+            Card card = await _repository.Card.GetCardAsync(idAccount, idCard, trackChenges: false);
             if (card == null)
             {
                 _logger.LogError($"Card with id: {idCard} doesn't exist in the database.");
@@ -140,13 +141,13 @@ namespace BankSistem.Controllers
             }
 
             _repository.Card.DeleteCard(card);
-            _repository.Save();
+            _repository.SaveAsync();
 
             return NoContent();
         }
 
         [HttpPatch("{idCard}")]
-        public IActionResult PartiallyUpdateCardForAccount(Guid idAccount, Guid idCard, [FromBody] JsonPatchDocument<CardForUpdateDto> patchDocument)
+        public async Task<IActionResult> PartiallyUpdateCardForAccount(Guid idAccount, Guid idCard, [FromBody] JsonPatchDocument<CardForUpdateDto> patchDocument)
         {
             if (patchDocument == null)
             {
@@ -154,14 +155,14 @@ namespace BankSistem.Controllers
                 return BadRequest("patchDoc object is null");
             }
 
-            Account account = GetAccountById(idAccount);
+            Account account = await GetAccountById(idAccount);
             if (account == null)
             {
                 _logger.LogInfo($"Account with id: {idAccount} does't exist in the database.");
                 return NotFound();
             }
 
-            Card cardEntity = _repository.Card.GetCard(idAccount, idCard, trackChenges: true);
+            Card cardEntity = await _repository.Card.GetCardAsync(idAccount, idCard, trackChenges: true);
             if (cardEntity == null)
             {
                 _logger.LogError($"Card with id: {idCard} doesn't exist in the database.");
@@ -180,11 +181,11 @@ namespace BankSistem.Controllers
 
             _mapper.Map(cardToPatch, cardEntity);
 
-            _repository.Save();
+            _repository.SaveAsync();
 
             return NoContent();
         }
 
-        private Account GetAccountById(Guid idAccount) => _repository.Account.GetAccount(idAccount, trackChenges: false);
+        private async Task<Account> GetAccountById(Guid idAccount) => await _repository.Account.GetAccountAsync(idAccount, trackChenges: false);
     }
 }

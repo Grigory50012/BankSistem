@@ -1,12 +1,13 @@
 ﻿using Entities.Models;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Contracts
 {
     public interface IAccountRepository
     {
-        IEnumerable<Account> GetAllAccounts(bool trackChenges);
-        Account GetAccount(Guid idAccount, bool trackChenges);
+        Task<IEnumerable<Account>> GetAllAccountsAsync(bool trackChenges);
+        Task<Account> GetAccountAsync(Guid idAccount, bool trackChenges);
     }
 }

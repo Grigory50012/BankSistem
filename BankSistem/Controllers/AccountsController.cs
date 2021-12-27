@@ -5,6 +5,7 @@ using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BankSistem.Controllers
 {
@@ -24,17 +25,17 @@ namespace BankSistem.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAccounts()
+        public async Task<IActionResult> GetAccounts()
         {
-            IEnumerable<Account> accounts = _repository.Account.GetAllAccounts(trackChenges: false);
+            IEnumerable<Account> accounts = await _repository.Account.GetAllAccountsAsync(trackChenges: false);
             IEnumerable<AccountDto> accountsDto = _mapper.Map<IEnumerable<AccountDto>>(accounts);
             return Ok(accountsDto);
         }
 
         [HttpGet("{idAccount}")]
-        public IActionResult GetAccount(Guid idAccount)
+        public async Task<IActionResult> GetAccount(Guid idAccount)
         {
-            Account account = _repository.Account.GetAccount(idAccount, trackChenges: false);
+            Account account = await _repository.Account.GetAccountAsync(idAccount, trackChenges: false);
             if(account == null)
             {
                 _logger.LogInfo($"Account with id: {idAccount} does't exist in the database.");

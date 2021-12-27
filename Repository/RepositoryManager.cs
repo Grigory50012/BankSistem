@@ -101,6 +101,6 @@ namespace Repository
             }
         }
 
-        public void Save() => _repositoryContext.SaveChanges();
+        public void SaveAsync() => _repositoryContext.SaveChangesAsync();
     }
 }
