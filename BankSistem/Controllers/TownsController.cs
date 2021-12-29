@@ -22,7 +22,7 @@ namespace BankSistem.Controllers
         [HttpGet]
         public IActionResult GetTowns()
         {
-            var towns = _repository.Town.GetTowns(trackChenges: false);
+            var towns = _repository.Town.GetTowns(trackChanges: false);
             var townsDto = _mapper.Map<IEnumerable<TownDto>>(towns);
             return Ok(townsDto);
         }

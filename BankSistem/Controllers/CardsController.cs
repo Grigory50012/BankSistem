@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Entities.RequestFeatures;
+using Newtonsoft.Json;
 
 namespace BankSistem.Controllers
 {
@@ -40,12 +42,15 @@ namespace BankSistem.Controllers
 
         [HttpGet(Name = "CardsByAccountId")]
         [ServiceFilter(typeof(ValidateAccountExistsAttribute))]
-        public async Task<IActionResult> GetCards(Guid idAccount)
+        public async Task<IActionResult> GetCardsForAccount(Guid idAccount, [FromQuery] CardParameters cardParameters)
         {
             Account account = HttpContext.Items["account"] as Account;
 
-            IEnumerable<Card> cards = await _repository.Card.GetCardsAsync(idAccount, trackChenges: false);
-            IEnumerable<CardDto> cardsDto = _mapper.Map<IEnumerable<CardDto>>(cards);
+            PagedList<Card> cardsFromDb = await _repository.Card.GetCardsAsync(idAccount, cardParameters, trackChanges: false);
+
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(cardsFromDb.MetaData));
+
+            IEnumerable<CardDto> cardsDto = _mapper.Map<IEnumerable<CardDto>>(cardsFromDb);
             return Ok(cardsDto);
         }
 
@@ -58,8 +63,7 @@ namespace BankSistem.Controllers
 
             Card cardEntity = _mapper.Map<Card>(card);
 
-            _repository.Card.CreateCard(idAccount, cardEntity);
-            await _repository.SaveAsync();
+            await CreateCard(idAccount, cardEntity);
 
             CardDto cardToReturn = _mapper.Map<CardDto>(cardEntity);
 
@@ -130,6 +134,12 @@ namespace BankSistem.Controllers
         private async Task DeleteCardAsync(Card card)
         {
             _repository.Card.DeleteCard(card);
+            await _repository.SaveAsync();
+        }
+
+        private async Task CreateCard(Guid idAccount, Card cardEntity)
+        {
+            _repository.Card.CreateCard(idAccount, cardEntity);
             await _repository.SaveAsync();
         }
     }

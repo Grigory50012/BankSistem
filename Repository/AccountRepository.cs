@@ -14,10 +14,10 @@ namespace Repository
         {
         }
 
-        public async Task<IEnumerable<Account>> GetAllAccountsAsync(bool trackChenges)
-            => await FindAll(trackChenges).ToListAsync();
+        public async Task<IEnumerable<Account>> GetAllAccountsAsync(bool trackChanges)
+            => await FindAll(trackChanges).ToListAsync();
 
-        public async Task<Account> GetAccountAsync(Guid idAccount, bool trackChenges)
-            => await FindByCondition(account => account.Id.Equals(idAccount), trackChenges).SingleOrDefaultAsync();
+        public async Task<Account> GetAccountAsync(Guid idAccount, bool trackChanges)
+            => await FindByCondition(account => account.Id.Equals(idAccount), trackChanges).SingleOrDefaultAsync();
     }
 }

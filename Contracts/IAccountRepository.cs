@@ -7,7 +7,7 @@ namespace Contracts
 {
     public interface IAccountRepository
     {
-        Task<IEnumerable<Account>> GetAllAccountsAsync(bool trackChenges);
-        Task<Account> GetAccountAsync(Guid idAccount, bool trackChenges);
+        Task<IEnumerable<Account>> GetAllAccountsAsync(bool trackChanges);
+        Task<Account> GetAccountAsync(Guid idAccount, bool trackChanges);
     }
 }
