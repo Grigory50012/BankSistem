@@ -1,4 +1,6 @@
-﻿namespace Contracts
+﻿using System.Threading.Tasks;
+
+namespace Contracts
 {
     public interface IRepositoryManager
     {
@@ -10,6 +12,6 @@
         IOwnerStatusRepository OwnerStatus { get; }
         ISocialStatusRepository SocialStatus { get; }
         ITownRepository Town { get; }
-        void SaveAsync();
+        Task SaveAsync();
     }
 }

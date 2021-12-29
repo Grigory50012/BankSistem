@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BankSistem.ActionFilters;
 using Contracts;
 using Entities.DataTransferObjects;
 using Entities.DataTransferObjects.ForCreationDto;
@@ -28,35 +29,20 @@ namespace BankSistem.Controllers
         }
 
         [HttpGet("{idCard}")]
-        public async Task<IActionResult> GetCard(Guid idAccount, Guid idCard)
+        [ServiceFilter(typeof(ValidateCardExistsAttribute))]
+        public IActionResult GetCard(Guid idAccount, Guid idCard)
         {
-            Account account = await GetAccountById(idAccount);
-            if (account == null)
-            {
-                _logger.LogInfo($"Account with id: {idAccount} does't exist in the database.");
-                return NotFound();
-            }
-
-            Card card = await _repository.Card.GetCardAsync(idAccount, idCard, trackChenges: false);
-            if (card == null)
-            {
-                _logger.LogError($"Card with id: {idCard} doesn't exist in the database.");
-                return NotFound();
-            }
+            Card card = HttpContext.Items["card"] as Card;
 
             CardDto cardToReturn = _mapper.Map<CardDto>(card);
             return Ok(cardToReturn);
         }
 
         [HttpGet(Name = "CardsByAccountId")]
+        [ServiceFilter(typeof(ValidateAccountExistsAttribute))]
         public async Task<IActionResult> GetCards(Guid idAccount)
         {
-            Account account = await GetAccountById(idAccount);
-            if (account == null)
-            {
-                _logger.LogInfo($"Account with id: {idAccount} does't exist in the database.");
-                return NotFound();
-            }
+            Account account = HttpContext.Items["account"] as Account;
 
             IEnumerable<Card> cards = await _repository.Card.GetCardsAsync(idAccount, trackChenges: false);
             IEnumerable<CardDto> cardsDto = _mapper.Map<IEnumerable<CardDto>>(cards);
@@ -64,31 +50,16 @@ namespace BankSistem.Controllers
         }
 
         [HttpPost]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [ServiceFilter(typeof(ValidateAccountExistsAttribute))]
         public async Task<IActionResult> CreateCard(Guid idAccount, [FromBody] CardForCreationDto card)
         {
-            if (card == null)
-            {
-                _logger.LogError("CardForCreationDto object sent from client is null.");
-                return BadRequest("CardForCreationDto object is null.");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError("Invalid model state for the EmployeeForCreationDto object");
-                return UnprocessableEntity(ModelState);
-            }
-
-            Account account = await GetAccountById(idAccount);
-            if (account == null)
-            {
-                _logger.LogInfo($"Account with id: {idAccount} does't exist in the database.");
-                return NotFound();
-            }
+            Account account = HttpContext.Items["account"] as Account;
 
             Card cardEntity = _mapper.Map<Card>(card);
 
             _repository.Card.CreateCard(idAccount, cardEntity);
-            _repository.SaveAsync();
+            await _repository.SaveAsync();
 
             CardDto cardToReturn = _mapper.Map<CardDto>(cardEntity);
 
@@ -96,27 +67,18 @@ namespace BankSistem.Controllers
         }
 
         [HttpPost("collection")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [ServiceFilter(typeof(ValidateAccountExistsAttribute))]
         public async Task<IActionResult> CreateCardCollection(Guid idAccount, IEnumerable<CardForCreationDto> cardCollection)
         {
-            if (cardCollection == null)
-            {
-                _logger.LogError("Card collection sent from client is null.");
-                return BadRequest("Card collection is null");
-            }
-
-            Account account = await GetAccountById(idAccount);
-            if (account == null)
-            {
-                _logger.LogInfo($"Account with id: {idAccount} does't exist in the database.");
-                return NotFound();
-            }
+            Account account = HttpContext.Items["account"] as Account;
 
             IEnumerable<Card> cardEntities = _mapper.Map<IEnumerable<Card>>(cardCollection);
             foreach (Card card in cardEntities)
             {
                 _repository.Card.CreateCard(idAccount, card);
             }
-            _repository.SaveAsync();
+            await _repository.SaveAsync();
 
             IEnumerable<CardDto> cardCollectionsToReturn = _mapper.Map<IEnumerable<CardDto>>(cardEntities);
 
@@ -124,68 +86,51 @@ namespace BankSistem.Controllers
         }
 
         [HttpDelete("{idCard}")]
+        [ServiceFilter(typeof(ValidateCardExistsAttribute))]
         public async Task<IActionResult> DeleteCard(Guid idAccount, Guid idCard)
         {
-            Account account = await GetAccountById(idAccount);
-            if (account == null)
-            {
-                _logger.LogInfo($"Account with id: {idAccount} does't exist in the database.");
-                return NotFound();
-            }
+            Card cardForAccount = HttpContext.Items["card"] as Card;
 
-            Card card = await _repository.Card.GetCardAsync(idAccount, idCard, trackChenges: false);
-            if (card == null)
-            {
-                _logger.LogError($"Card with id: {idCard} doesn't exist in the database.");
-                return NotFound();
-            }
-
-            _repository.Card.DeleteCard(card);
-            _repository.SaveAsync();
+            await DeleteCardAsync(cardForAccount);
 
             return NoContent();
         }
 
         [HttpPatch("{idCard}")]
+        [ServiceFilter(typeof(ValidateCardExistsAttribute))]
         public async Task<IActionResult> PartiallyUpdateCardForAccount(Guid idAccount, Guid idCard, [FromBody] JsonPatchDocument<CardForUpdateDto> patchDocument)
         {
-            if (patchDocument == null)
+            if(patchDocument == null)
             {
                 _logger.LogError("patchDoc object sent from client is null.");
                 return BadRequest("patchDoc object is null");
             }
 
-            Account account = await GetAccountById(idAccount);
-            if (account == null)
-            {
-                _logger.LogInfo($"Account with id: {idAccount} does't exist in the database.");
-                return NotFound();
-            }
-
-            Card cardEntity = await _repository.Card.GetCardAsync(idAccount, idCard, trackChenges: true);
-            if (cardEntity == null)
-            {
-                _logger.LogError($"Card with id: {idCard} doesn't exist in the database.");
-                return NotFound();
-            }
+            Card cardEntity = HttpContext.Items["card"] as Card;
 
             CardForUpdateDto cardToPatch = _mapper.Map<CardForUpdateDto>(cardEntity);
 
             patchDocument.ApplyTo(cardToPatch, ModelState);
 
+            TryValidateModel(cardToPatch);
+
             if (!ModelState.IsValid)
             {
-                _logger.LogError("Invalid model state for the EmployeeForCreationDto object");
+                _logger.LogError("Invalid model state for the patch document");
                 return UnprocessableEntity(ModelState);
             }
 
             _mapper.Map(cardToPatch, cardEntity);
 
-            _repository.SaveAsync();
+            await _repository.SaveAsync();
 
             return NoContent();
         }
 
-        private async Task<Account> GetAccountById(Guid idAccount) => await _repository.Account.GetAccountAsync(idAccount, trackChenges: false);
+        private async Task DeleteCardAsync(Card card)
+        {
+            _repository.Card.DeleteCard(card);
+            await _repository.SaveAsync();
+        }
     }
 }

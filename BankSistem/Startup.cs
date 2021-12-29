@@ -1,3 +1,4 @@
+using BankSistem.ActionFilters;
 using BankSistem.Extensions;
 using Contracts;
 using Microsoft.AspNetCore.Builder;
@@ -30,6 +31,9 @@ namespace BankSistem
             services.ConfigureSqlContext(Configuration); //For SQL
             services.ConfigureRepositoryManager();
             services.AddAutoMapper(typeof(Startup));
+            services.AddScoped<ValidationFilterAttribute>();
+            services.AddScoped<ValidateAccountExistsAttribute>();
+            services.AddScoped<ValidateCardExistsAttribute>();
 
             services.AddControllers(config =>
             {
