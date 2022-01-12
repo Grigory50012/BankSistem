@@ -2,8 +2,10 @@
 using Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Repository
 {
@@ -18,7 +20,13 @@ namespace Repository
 
         public IQueryable<T> FindAll(bool trackChanges) =>
             !trackChanges ?
-                RepositoryContext.Set<T>().AsNoTracking() : RepositoryContext.Set<T>();
+                RepositoryContext.Set<T>().AsNoTracking() :
+                RepositoryContext.Set<T>();
+
+        public IQueryable<T> ExecQuery(string query, bool trackChanges) =>
+            !trackChanges ?
+                RepositoryContext.Set<T>().FromSqlRaw(query).AsNoTracking() :
+                RepositoryContext.Set<T>().FromSqlRaw(query);
 
         public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges) =>
             !trackChanges ?

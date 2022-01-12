@@ -44,5 +44,13 @@ namespace BankSistem.Controllers
             AccountDto accontDto = _mapper.Map<AccountDto>(account);
             return Ok(accontDto);
         }
+
+        [HttpGet("withoutCards")]
+        public async Task<IActionResult> GetAccountsWithoutCards()
+        {
+            IEnumerable<Account> accounts = await _repository.Account.GetAccountsWithoutCardsAsync(trackChanges: false);
+            IEnumerable<AccountDto> accountsDto = _mapper.Map<IEnumerable<AccountDto>>(accounts);
+            return Ok(accountsDto);
+        }
     }
 }

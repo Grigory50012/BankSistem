@@ -9,5 +9,6 @@ namespace Contracts
     {
         Task<IEnumerable<Account>> GetAllAccountsAsync(bool trackChanges);
         Task<Account> GetAccountAsync(Guid idAccount, bool trackChanges);
+        Task<IEnumerable<Account>> GetAccountsWithoutCardsAsync(bool trackChanges);
     }
 }

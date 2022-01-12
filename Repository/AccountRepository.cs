@@ -19,5 +19,8 @@ namespace Repository
 
         public async Task<Account> GetAccountAsync(Guid idAccount, bool trackChanges)
             => await FindByCondition(account => account.Id.Equals(idAccount), trackChanges).SingleOrDefaultAsync();
+
+        public async Task<IEnumerable<Account>> GetAccountsWithoutCardsAsync(bool trackChanges)
+            => await ExecQuery("EXEC GetAccountsWithoutCards", trackChanges).ToListAsync();
     }
 }
