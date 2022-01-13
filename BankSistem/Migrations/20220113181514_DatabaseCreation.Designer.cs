@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankSistem.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20211215212211_InitialData")]
-    partial class InitialData
+    [Migration("20220113181514_DatabaseCreation")]
+    partial class DatabaseCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,15 +31,10 @@ namespace BankSistem.Migrations
                     b.Property<decimal>("Balance")
                         .HasColumnType("Money");
 
-                    b.Property<Guid>("IdBank")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("IdCardOwner")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("IdBank");
 
                     b.HasIndex("IdCardOwner");
 
@@ -50,172 +45,43 @@ namespace BankSistem.Migrations
                         {
                             Id = new Guid("ed45ad28-c73e-4b0f-9db7-7f2d0040f438"),
                             Balance = 10m,
-                            IdBank = new Guid("6a38147d-92e0-43b8-8006-46649f9f6661"),
                             IdCardOwner = new Guid("0ef8ac41-db5c-47b6-a536-0706d7204f99")
                         },
                         new
                         {
                             Id = new Guid("f30b0daa-810f-4d14-9072-158973ccf3ca"),
                             Balance = 20m,
-                            IdBank = new Guid("6dd76ba9-0b62-49bd-8abb-f8f803013c46"),
                             IdCardOwner = new Guid("58476e7a-1213-4c17-afb5-049cf6265d6a")
                         },
                         new
                         {
                             Id = new Guid("b7736cae-2a7a-42e7-900c-163d0a6b1db6"),
                             Balance = 30m,
-                            IdBank = new Guid("3d564a3e-67b8-42f6-a262-a29f7059a930"),
                             IdCardOwner = new Guid("69799b8b-3a07-4ad0-bd56-3131ccde4d81")
                         },
                         new
                         {
                             Id = new Guid("93ad8e5c-cd32-4cd9-8944-224e76d6d24d"),
                             Balance = 40m,
-                            IdBank = new Guid("ab08b7ab-7b08-49b4-997d-f556d87bca73"),
                             IdCardOwner = new Guid("81dffe2c-4577-4432-9743-e4cc8920bdf7")
                         },
                         new
                         {
                             Id = new Guid("e4150c2e-c74a-400b-9fee-48b09ef3e805"),
                             Balance = 50m,
-                            IdBank = new Guid("484426b9-677b-470b-b6b6-95c65b4efa32"),
                             IdCardOwner = new Guid("a1e9235c-61a4-4a60-a6d0-117f924a2605")
                         },
                         new
                         {
                             Id = new Guid("ec38f0a8-be2b-4f91-9af0-47ab5d1769c3"),
                             Balance = 60m,
-                            IdBank = new Guid("484426b9-677b-470b-b6b6-95c65b4efa32"),
                             IdCardOwner = new Guid("0ef8ac41-db5c-47b6-a536-0706d7204f99")
                         },
                         new
                         {
                             Id = new Guid("8c961fbe-9316-41b0-913c-6fed6977d479"),
                             Balance = 70m,
-                            IdBank = new Guid("ab08b7ab-7b08-49b4-997d-f556d87bca73"),
                             IdCardOwner = new Guid("58476e7a-1213-4c17-afb5-049cf6265d6a")
-                        });
-                });
-
-            modelBuilder.Entity("Entities.Models.Bank", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("IdBank");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Banks");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("6a38147d-92e0-43b8-8006-46649f9f6661"),
-                            Name = "Белинвестбанк"
-                        },
-                        new
-                        {
-                            Id = new Guid("6dd76ba9-0b62-49bd-8abb-f8f803013c46"),
-                            Name = "Белагропромбанк"
-                        },
-                        new
-                        {
-                            Id = new Guid("3d564a3e-67b8-42f6-a262-a29f7059a930"),
-                            Name = "Беларусбанк"
-                        },
-                        new
-                        {
-                            Id = new Guid("ab08b7ab-7b08-49b4-997d-f556d87bca73"),
-                            Name = "Приорбанк"
-                        },
-                        new
-                        {
-                            Id = new Guid("484426b9-677b-470b-b6b6-95c65b4efa32"),
-                            Name = "ВТБбанк"
-                        });
-                });
-
-            modelBuilder.Entity("Entities.Models.BankBranch", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("IdBankBranch");
-
-                    b.Property<Guid>("IdBank")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("IdTown")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdBank");
-
-                    b.HasIndex("IdTown");
-
-                    b.ToTable("BankBranches");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("055c34da-6528-4795-bfe3-9431bd7a46f5"),
-                            IdBank = new Guid("6a38147d-92e0-43b8-8006-46649f9f6661"),
-                            IdTown = new Guid("2e4811ba-4642-4fe6-81fe-74c630179ac0")
-                        },
-                        new
-                        {
-                            Id = new Guid("0fe5c450-9e15-4ef9-846e-88e2604373a6"),
-                            IdBank = new Guid("6dd76ba9-0b62-49bd-8abb-f8f803013c46"),
-                            IdTown = new Guid("30d0d56f-0050-414a-b6da-8dc810f974e4")
-                        },
-                        new
-                        {
-                            Id = new Guid("e2fe6e32-ee54-4d60-9047-a413022a61fd"),
-                            IdBank = new Guid("3d564a3e-67b8-42f6-a262-a29f7059a930"),
-                            IdTown = new Guid("76fc6ed2-cb47-46c1-bd18-eb4ae0990bd3")
-                        },
-                        new
-                        {
-                            Id = new Guid("46c14374-6f18-483c-8e87-bafb41bf589f"),
-                            IdBank = new Guid("ab08b7ab-7b08-49b4-997d-f556d87bca73"),
-                            IdTown = new Guid("dd73f9af-e3c3-4ac3-b1c7-eea6cc3ae970")
-                        },
-                        new
-                        {
-                            Id = new Guid("0de6a4fd-4a66-4e61-a38b-69d2e431f003"),
-                            IdBank = new Guid("484426b9-677b-470b-b6b6-95c65b4efa32"),
-                            IdTown = new Guid("e89e58ea-0e90-497a-af2e-b034a4057332")
-                        },
-                        new
-                        {
-                            Id = new Guid("f020bb52-e8b1-4a26-8ff5-4492fda5ea38"),
-                            IdBank = new Guid("6a38147d-92e0-43b8-8006-46649f9f6661"),
-                            IdTown = new Guid("e89e58ea-0e90-497a-af2e-b034a4057332")
-                        },
-                        new
-                        {
-                            Id = new Guid("3d3296ce-721f-4163-a301-59ec00c7f072"),
-                            IdBank = new Guid("6dd76ba9-0b62-49bd-8abb-f8f803013c46"),
-                            IdTown = new Guid("dd73f9af-e3c3-4ac3-b1c7-eea6cc3ae970")
-                        },
-                        new
-                        {
-                            Id = new Guid("21a121e9-0080-46e3-8f6a-991759ad5cce"),
-                            IdBank = new Guid("ab08b7ab-7b08-49b4-997d-f556d87bca73"),
-                            IdTown = new Guid("30d0d56f-0050-414a-b6da-8dc810f974e4")
-                        },
-                        new
-                        {
-                            Id = new Guid("8264c1c2-e917-4f2a-8ab0-7a498d777061"),
-                            IdBank = new Guid("484426b9-677b-470b-b6b6-95c65b4efa32"),
-                            IdTown = new Guid("2e4811ba-4642-4fe6-81fe-74c630179ac0")
                         });
                 });
 
@@ -241,61 +107,61 @@ namespace BankSistem.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("f23feeee-f76a-4d42-8aea-b415c84b33bf"),
+                            Id = new Guid("e4e3cd8b-2a59-4dbc-af8e-82196dac63f9"),
                             Balance = 100m,
                             IdAccount = new Guid("ed45ad28-c73e-4b0f-9db7-7f2d0040f438")
                         },
                         new
                         {
-                            Id = new Guid("3daf872c-6883-4e46-b63a-c95216945ad5"),
+                            Id = new Guid("d3787455-4540-4c89-8cee-29aa0e14f73b"),
                             Balance = 90m,
                             IdAccount = new Guid("f30b0daa-810f-4d14-9072-158973ccf3ca")
                         },
                         new
                         {
-                            Id = new Guid("7b17c592-e5ed-4d39-8380-f72572c667eb"),
+                            Id = new Guid("ce95c5b3-a854-449b-b6bc-3d3f6d74d4e7"),
                             Balance = 80m,
                             IdAccount = new Guid("b7736cae-2a7a-42e7-900c-163d0a6b1db6")
                         },
                         new
                         {
-                            Id = new Guid("d89c3f65-808b-4a74-9efa-7e21ede465c6"),
+                            Id = new Guid("90ff565b-0ec2-434b-8779-d4f3d54f7478"),
                             Balance = 70m,
                             IdAccount = new Guid("93ad8e5c-cd32-4cd9-8944-224e76d6d24d")
                         },
                         new
                         {
-                            Id = new Guid("f3b534c8-422b-46b0-86ec-43823409dc65"),
+                            Id = new Guid("66c03d49-f33b-4aa8-bcf5-81b1144828de"),
                             Balance = 60m,
                             IdAccount = new Guid("e4150c2e-c74a-400b-9fee-48b09ef3e805")
                         },
                         new
                         {
-                            Id = new Guid("0081aec8-f88f-4b8e-976c-b6d121b3117e"),
+                            Id = new Guid("fe4eca51-fad4-4ead-9bda-2a9fbd81a87a"),
                             Balance = 50m,
                             IdAccount = new Guid("ec38f0a8-be2b-4f91-9af0-47ab5d1769c3")
                         },
                         new
                         {
-                            Id = new Guid("92c2423a-4820-4331-aa13-c3d8b3b735b8"),
+                            Id = new Guid("18dc9f21-2bd6-4a6c-bb6a-67f9b200f8d6"),
                             Balance = 40m,
                             IdAccount = new Guid("8c961fbe-9316-41b0-913c-6fed6977d479")
                         },
                         new
                         {
-                            Id = new Guid("08d12db6-f707-4735-b612-66f94eaa6487"),
+                            Id = new Guid("cd6f000d-5285-4401-b010-283fe976d589"),
                             Balance = 30m,
                             IdAccount = new Guid("ed45ad28-c73e-4b0f-9db7-7f2d0040f438")
                         },
                         new
                         {
-                            Id = new Guid("02f10620-caf8-413b-bb75-a77a51f70bde"),
+                            Id = new Guid("50fa7c36-1025-407c-af2e-7c060fd69ffd"),
                             Balance = 20m,
                             IdAccount = new Guid("f30b0daa-810f-4d14-9072-158973ccf3ca")
                         },
                         new
                         {
-                            Id = new Guid("abae553f-c457-4ad8-bc22-3eb0f8288f6e"),
+                            Id = new Guid("ba52bcfa-e7ba-4dff-9ef1-04118350d1fc"),
                             Balance = 10m,
                             IdAccount = new Guid("b7736cae-2a7a-42e7-900c-163d0a6b1db6")
                         });
@@ -369,31 +235,31 @@ namespace BankSistem.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("04d4822c-41fe-43e0-bddb-ea467f25d629"),
+                            Id = new Guid("353ad58d-6c1f-468d-9c30-65cf14329afd"),
                             IdCardOwner = new Guid("0ef8ac41-db5c-47b6-a536-0706d7204f99"),
                             IdSocialStatus = new Guid("c163c49a-c3df-40e0-8bbc-e635aee61431")
                         },
                         new
                         {
-                            Id = new Guid("bc5dce62-0a49-40bf-84e1-c0311563b3c3"),
+                            Id = new Guid("628f2928-2104-4fd5-a073-9f2316a6ae43"),
                             IdCardOwner = new Guid("58476e7a-1213-4c17-afb5-049cf6265d6a"),
                             IdSocialStatus = new Guid("66acb6d3-256a-4cf7-9e76-04d84ceea1f4")
                         },
                         new
                         {
-                            Id = new Guid("432ac8d8-7005-414c-a99e-d9856374eb77"),
+                            Id = new Guid("3675bbfd-1d00-497e-88d5-190a3b104343"),
                             IdCardOwner = new Guid("69799b8b-3a07-4ad0-bd56-3131ccde4d81"),
                             IdSocialStatus = new Guid("04fadf24-1488-4197-9ae6-a8737ffe8337")
                         },
                         new
                         {
-                            Id = new Guid("3d39c7b1-267a-4408-b2a9-d6ec991379fd"),
+                            Id = new Guid("23879e10-0a0b-44a1-803d-8b60f9d1b301"),
                             IdCardOwner = new Guid("81dffe2c-4577-4432-9743-e4cc8920bdf7"),
                             IdSocialStatus = new Guid("c163c49a-c3df-40e0-8bbc-e635aee61431")
                         },
                         new
                         {
-                            Id = new Guid("3603c9b7-5114-49d5-9404-ea82cd7ccd8c"),
+                            Id = new Guid("05da5e43-2252-420a-977f-1ea9cdbf4232"),
                             IdCardOwner = new Guid("a1e9235c-61a4-4a60-a6d0-117f924a2605"),
                             IdSocialStatus = new Guid("66acb6d3-256a-4cf7-9e76-04d84ceea1f4")
                         });
@@ -433,86 +299,15 @@ namespace BankSistem.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Entities.Models.Town", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("IdTown");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Towns");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("2e4811ba-4642-4fe6-81fe-74c630179ac0"),
-                            Name = "Полоцк"
-                        },
-                        new
-                        {
-                            Id = new Guid("30d0d56f-0050-414a-b6da-8dc810f974e4"),
-                            Name = "Новополоцк"
-                        },
-                        new
-                        {
-                            Id = new Guid("76fc6ed2-cb47-46c1-bd18-eb4ae0990bd3"),
-                            Name = "Минск"
-                        },
-                        new
-                        {
-                            Id = new Guid("dd73f9af-e3c3-4ac3-b1c7-eea6cc3ae970"),
-                            Name = "Витебск"
-                        },
-                        new
-                        {
-                            Id = new Guid("e89e58ea-0e90-497a-af2e-b034a4057332"),
-                            Name = "Могилёв"
-                        });
-                });
-
             modelBuilder.Entity("Entities.Models.Account", b =>
                 {
-                    b.HasOne("Entities.Models.Bank", "Bank")
-                        .WithMany("Accounts")
-                        .HasForeignKey("IdBank")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Entities.Models.CardOwner", "CardOwner")
                         .WithMany("Accounts")
                         .HasForeignKey("IdCardOwner")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Bank");
-
                     b.Navigation("CardOwner");
-                });
-
-            modelBuilder.Entity("Entities.Models.BankBranch", b =>
-                {
-                    b.HasOne("Entities.Models.Bank", "Bank")
-                        .WithMany("BankBranches")
-                        .HasForeignKey("IdBank")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Entities.Models.Town", "Town")
-                        .WithMany("BankBranches")
-                        .HasForeignKey("IdTown")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Bank");
-
-                    b.Navigation("Town");
                 });
 
             modelBuilder.Entity("Entities.Models.Card", b =>
@@ -550,13 +345,6 @@ namespace BankSistem.Migrations
                     b.Navigation("Cards");
                 });
 
-            modelBuilder.Entity("Entities.Models.Bank", b =>
-                {
-                    b.Navigation("Accounts");
-
-                    b.Navigation("BankBranches");
-                });
-
             modelBuilder.Entity("Entities.Models.CardOwner", b =>
                 {
                     b.Navigation("Accounts");
@@ -567,11 +355,6 @@ namespace BankSistem.Migrations
             modelBuilder.Entity("Entities.Models.SocialStatus", b =>
                 {
                     b.Navigation("OwnerStatuses");
-                });
-
-            modelBuilder.Entity("Entities.Models.Town", b =>
-                {
-                    b.Navigation("BankBranches");
                 });
 #pragma warning restore 612, 618
         }

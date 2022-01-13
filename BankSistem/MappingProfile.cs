@@ -10,8 +10,8 @@ namespace BankSistem
     {
         public MappingProfile()
         {
-            CreateMap<Account, AccountDto>();
-            CreateMap<Town, TownDto>();
+            CreateMap<Account, AccountDto>().ForMember(accountDto => accountDto.CardOwnerName, 
+                option => option.MapFrom(cardOwner => cardOwner.CardOwner.Name));
 
             CreateMap<Card, CardDto>();
             CreateMap<CardForCreationDto, Card>();

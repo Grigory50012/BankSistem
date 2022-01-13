@@ -15,8 +15,8 @@ namespace Repository
         public CardRepository(RepositoryContext repositoryContext) : base(repositoryContext) { }
 
         public async Task<Card> GetCardAsync(Guid idAccount, Guid idCard, bool trackChanges)
-            => await FindByCondition(card => card.IdAccount.Equals(idAccount) 
-            && card.Id.Equals(idCard), trackChanges).SingleOrDefaultAsync();
+            => await FindByCondition(card => card.IdAccount.Equals(idAccount) && card.Id.Equals(idCard), trackChanges)
+            .SingleOrDefaultAsync();
 
         public async Task<PagedList<Card>> GetCardsAsync(Guid idAccount, CardParameters cardParameters, bool trackChanges)
         {

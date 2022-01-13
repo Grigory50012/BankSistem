@@ -14,10 +14,6 @@ namespace Entities.Models
         [Column(TypeName = "Money")]
         public decimal Balance { get; set; }
 
-        [ForeignKey(nameof(Bank))]
-        public Guid IdBank { get; set; }
-        public Bank Bank { get; set; }
-
         [ForeignKey(nameof(CardOwner))]
         public Guid IdCardOwner { get; set; }
         public CardOwner CardOwner { get; set; }

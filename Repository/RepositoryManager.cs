@@ -9,13 +9,10 @@ namespace Repository
         private RepositoryContext _repositoryContext;
 
         private IAccountRepository _accountRepository;
-        private IBankBranchRepository _bankBranchRepository;
-        private IBankRepository _bankRepository;
         private ICardOwnerRepository _cardOwnerRepository;
         private ICardRepository _cardRepository;
         private IOwnerStatusRepository _ownerStatusRepository;
         private ISocialStatusRepository _socialStatusRepository;
-        private ITownRepository _townRepository;
 
         public RepositoryManager(RepositoryContext repositoryContext)
         {
@@ -29,26 +26,6 @@ namespace Repository
                 if (_accountRepository == null)
                     _accountRepository = new AccountRepository(_repositoryContext);
                 return _accountRepository;
-            }
-        }
-
-        public IBankBranchRepository BankBranch
-        {
-            get
-            {
-                if (_bankBranchRepository == null)
-                    _bankBranchRepository = new BankBranchRepository(_repositoryContext);
-                return _bankBranchRepository;
-            }
-        }
-
-        public IBankRepository Bank
-        {
-            get
-            {
-                if (_bankRepository == null)
-                    _bankRepository = new BankRepository(_repositoryContext);
-                return _bankRepository;
             }
         }
 
@@ -89,16 +66,6 @@ namespace Repository
                 if (_socialStatusRepository == null)
                     _socialStatusRepository = new SocialStatusRepository(_repositoryContext);
                 return _socialStatusRepository;
-            }
-        }
-
-        public ITownRepository Town
-        {
-            get
-            {
-                if (_townRepository == null)
-                    _townRepository = new TownRepository(_repositoryContext);
-                return _townRepository;
             }
         }
 
