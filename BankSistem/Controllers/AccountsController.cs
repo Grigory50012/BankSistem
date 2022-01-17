@@ -33,8 +33,8 @@ namespace BankSistem.Controllers
             return Ok(accountsDto);
         }
 
-        [HttpGet("{idAccount}")]
-        [HttpHead]
+        [HttpGet("{idAccount}", Name = "GetAccounts")]
+        [HttpHead("{idAccount}")]
         public async Task<IActionResult> GetAccount(Guid idAccount)
         {
             Account account = await _repository.Account.GetAccountAsync(idAccount, trackChanges: false);
@@ -48,7 +48,7 @@ namespace BankSistem.Controllers
         }
 
         [HttpGet("withoutCards")]
-        [HttpHead]
+        [HttpHead("withoutCards")]
         public async Task<IActionResult> GetAccountsWithoutCards()
         {
             IEnumerable<Account> accounts = await _repository.Account.GetAccountsWithoutCardsAsync(trackChanges: false);

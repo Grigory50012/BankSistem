@@ -31,7 +31,7 @@ namespace BankSistem.Controllers
         }
 
         [HttpGet("{idCard}")]
-        [HttpHead]
+        [HttpHead("{idCard}")]
         [ServiceFilter(typeof(ValidateCardExistsAttribute))]
         public IActionResult GetCard(Guid idAccount, Guid idCard)
         {
