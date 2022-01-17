@@ -14,11 +14,11 @@ namespace Entities
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new AccountConfiguration());
-            modelBuilder.ApplyConfiguration(new CardConfiguration());
-            modelBuilder.ApplyConfiguration(new CardOwnerConfiguration());
-            modelBuilder.ApplyConfiguration(new OwnerStatusConfiguration());
-            modelBuilder.ApplyConfiguration(new SocialStatusConfiguration());
+            //modelBuilder.ApplyConfiguration(new AccountConfiguration());
+            //modelBuilder.ApplyConfiguration(new CardConfiguration());
+            //modelBuilder.ApplyConfiguration(new CardOwnerConfiguration());
+            //modelBuilder.ApplyConfiguration(new OwnerStatusConfiguration());
+            //modelBuilder.ApplyConfiguration(new SocialStatusConfiguration());
         }
 
         public DbSet<SocialStatus> SocialStatuses { get; set; }

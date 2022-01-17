@@ -25,6 +25,7 @@ namespace BankSistem.Controllers
         }
 
         [HttpGet]
+        [HttpHead]
         public async Task<IActionResult> GetAccounts()
         {
             IEnumerable<Account> accounts = await _repository.Account.GetAllAccountsAsync(trackChanges: false);
@@ -33,6 +34,7 @@ namespace BankSistem.Controllers
         }
 
         [HttpGet("{idAccount}")]
+        [HttpHead]
         public async Task<IActionResult> GetAccount(Guid idAccount)
         {
             Account account = await _repository.Account.GetAccountAsync(idAccount, trackChanges: false);
@@ -46,11 +48,19 @@ namespace BankSistem.Controllers
         }
 
         [HttpGet("withoutCards")]
+        [HttpHead]
         public async Task<IActionResult> GetAccountsWithoutCards()
         {
             IEnumerable<Account> accounts = await _repository.Account.GetAccountsWithoutCardsAsync(trackChanges: false);
             IEnumerable<AccountDto> accountsDto = _mapper.Map<IEnumerable<AccountDto>>(accounts);
             return Ok(accountsDto);
+        }
+
+        [HttpOptions]
+        public IActionResult GetCompaniesOptions()
+        {
+            Response.Headers.Add("Allow", "GET, OPTIONS");
+            return Ok();
         }
     }
 }

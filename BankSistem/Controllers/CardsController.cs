@@ -31,6 +31,7 @@ namespace BankSistem.Controllers
         }
 
         [HttpGet("{idCard}")]
+        [HttpHead]
         [ServiceFilter(typeof(ValidateCardExistsAttribute))]
         public IActionResult GetCard(Guid idAccount, Guid idCard)
         {
@@ -41,6 +42,7 @@ namespace BankSistem.Controllers
         }
 
         [HttpGet(Name = "CardsByAccountId")]
+        [HttpHead]
         [ServiceFilter(typeof(ValidateAccountExistsAttribute))]
         public async Task<IActionResult> GetCardsForAccount(Guid idAccount, [FromQuery] CardParameters cardParameters)
         {
@@ -89,6 +91,12 @@ namespace BankSistem.Controllers
             return CreatedAtRoute("CardsByAccountId", new { idAccount }, cardCollectionsToReturn);
         }
 
+        private async Task CreateCard(Guid idAccount, Card cardEntity)
+        {
+            _repository.Card.CreateCard(idAccount, cardEntity);
+            await _repository.SaveAsync();
+        }
+
         [HttpDelete("{idCard}")]
         [ServiceFilter(typeof(ValidateCardExistsAttribute))]
         public async Task<IActionResult> DeleteCard(Guid idAccount, Guid idCard)
@@ -98,6 +106,12 @@ namespace BankSistem.Controllers
             await DeleteCardAsync(cardForAccount);
 
             return NoContent();
+        }
+
+        private async Task DeleteCardAsync(Card card)
+        {
+            _repository.Card.DeleteCard(card);
+            await _repository.SaveAsync();
         }
 
         [HttpPatch("{idCard}")]
@@ -131,16 +145,11 @@ namespace BankSistem.Controllers
             return NoContent();
         }
 
-        private async Task DeleteCardAsync(Card card)
+        [HttpOptions]
+        public IActionResult GetCompaniesOptions()
         {
-            _repository.Card.DeleteCard(card);
-            await _repository.SaveAsync();
-        }
-
-        private async Task CreateCard(Guid idAccount, Card cardEntity)
-        {
-            _repository.Card.CreateCard(idAccount, cardEntity);
-            await _repository.SaveAsync();
+            Response.Headers.Add("Allow", "GET, OPTIONS, POST, DELETE, PATCH");
+            return Ok();
         }
     }
 }
